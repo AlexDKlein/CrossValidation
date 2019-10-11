@@ -24,6 +24,8 @@ class KDE():
     def get_bandwidth(self, method=None):
         n, d = np.shape(self.data)
         coeff = (4 / (d + 2)) ** (1 / (d + 4)) * n ** (-1 /  (d + 4))
-        return np.std(self.data, axis=0) * coeff
+        bw = np.sqrt(np.std(self.data, axis=0) * coeff)
+        return bw
+
 
     
