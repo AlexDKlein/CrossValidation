@@ -22,10 +22,30 @@ class KDE():
 
     
     def get_bandwidth(self, method=None):
-        n, d = np.shape(self.data)
-        coeff = (4 / (d + 2)) ** (1 / (d + 4)) * n ** (-1 /  (d + 4))
-        bw = np.sqrt(np.std(self.data, axis=0) * coeff)
-        return bw
+        """
+            Set and return the bandwidth to be used in future kernel density
+            estimations.
+            
+            Parameters
+            ==========
+            method: callable, default=None
+                The method used to calculate or estimate the bandwidth.
+                Custom methods must take an array-like matching the KDE 
+                object's `data` attribute and return a 1-d array of length
+                `ndim(data)`. By default, use Silverman's rule of thumb.
 
+            Returns 
+            =========
+            output: np.ndarray[ndim=1, dtype=float]
+                The results of the bandwidth calculation.
+
+        """
+        if method is None:
+            n, d = np.shape(self.data)
+            coeff = (4 / (d + 2)) ** (1 / (d + 4)) * n ** (-1 /  (d + 4))
+            self.bandwidth  = np.sqrt(np.std(self.data, axis=0) * coeff)
+        else:
+            self.bandwidth = method(self.data)
+        return self.bandwidth
 
     
